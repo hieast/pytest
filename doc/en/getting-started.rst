@@ -1,23 +1,23 @@
 .. _get-started:
 
-Get Started
+开始使用
 ===================================
 
 .. _`getstarted`:
 .. _`installation`:
 
-Install ``pytest``
+安装 ``pytest``
 ----------------------------------------
 
-``pytest`` requires: Python 3.8+ or PyPy3.
+``pytest`` 需要: Python 3.8+ 或 PyPy3.
 
-1. Run the following command in your command line:
+1. 在命令行中运行以下命令：
 
 .. code-block:: bash
 
     pip install -U pytest
 
-2. Check that you installed the correct version:
+2. 检查你是否安装了正确的版本：
 
 .. code-block:: bash
 
@@ -26,14 +26,14 @@ Install ``pytest``
 
 .. _`simpletest`:
 
-Create your first test
+创建你的第一个测试
 ----------------------------------------------------------
 
-Create a new file called ``test_sample.py``, containing a function, and a test:
+创建一个名为 ``test_sample.py`` 的新文件，其中包含一个函数和一个测试：
 
 .. code-block:: python
 
-    # content of test_sample.py
+    # test_sample.py 文件内容
     def func(x):
         return x + 1
 
@@ -41,7 +41,7 @@ Create a new file called ``test_sample.py``, containing a function, and a test:
     def test_answer():
         assert func(3) == 5
 
-The test
+测试
 
 .. code-block:: pytest
 
@@ -66,26 +66,25 @@ The test
     FAILED test_sample.py::test_answer - assert 4 == 5
     ============================ 1 failed in 0.12s =============================
 
-The ``[100%]`` refers to the overall progress of running all test cases. After it finishes, pytest then shows a failure report because ``func(3)`` does not return ``5``.
+``[100%]`` 是指运行所有测试用例的整体进度。完成后，pytest 会显示失败报告，因为 ``func(3)`` 并未返回 ``5``。
 
 .. note::
 
-    You can use the ``assert`` statement to verify test expectations. pytest’s :ref:`Advanced assertion introspection <python:assert>` will intelligently report intermediate values of the assert expression so you can avoid the many names :ref:`of JUnit legacy methods <testcase-objects>`.
+    你可以使用 ``assert`` 语句来验证测试的预期结果。pytest 的 :ref:`高级断言内省 <python:assert>` 会智能地报告断言表达式的中间值，以便你可以避免许多名为 :ref:`JUnit 遗留方法的名称 <testcase-objects>` 。
 
-Run multiple tests
+运行多个测试
 ----------------------------------------------------------
 
-``pytest`` will run all files of the form test_*.py or \*_test.py in the current directory and its subdirectories. More generally, it follows :ref:`standard test discovery rules <test discovery>`.
+``pytest`` 会运行当前目录及其子目录中所有形如 test_*.py 或 \*_test.py 的文件。更一般地说，它遵循 :ref:`标准的测试发现规则 <test discovery>`。
 
-
-Assert that a certain exception is raised
+断言某段代码会触发特定的异常
 --------------------------------------------------------------
 
-Use the :ref:`raises <assertraises>` helper to assert that some code raises an exception:
+使用 :ref:`raises <assertraises>` 助手来断言某段代码会触发异常：
 
 .. code-block:: python
 
-    # content of test_sysexit.py
+    # test_sysexit.py 文件内容
     import pytest
 
 
@@ -97,7 +96,7 @@ Use the :ref:`raises <assertraises>` helper to assert that some code raises an e
         with pytest.raises(SystemExit):
             f()
 
-Execute the test function with “quiet” reporting mode:
+以“静默”报告模式执行测试函数：
 
 .. code-block:: pytest
 
@@ -107,18 +106,18 @@ Execute the test function with “quiet” reporting mode:
 
 .. note::
 
-    The ``-q/--quiet`` flag keeps the output brief in this and following examples.
+    ``-q/--quiet`` 标志在此及后续示例中将输出保持简洁。
 
-Group multiple tests in a class
+将多个测试组合到一个类中
 --------------------------------------------------------------
 
 .. regendoc:wipe
 
-Once you develop multiple tests, you may want to group them into a class. pytest makes it easy to create a class containing more than one test:
+一旦你开发出多个测试，你可能希望将它们分组到一个类中。pytest 让你可以轻松创建包含多个测试的类：
 
 .. code-block:: python
 
-    # content of test_class.py
+    # test_class.py 文件内容
     class TestClass:
         def test_one(self):
             x = "this"
@@ -128,7 +127,7 @@ Once you develop multiple tests, you may want to group them into a class. pytest
             x = "hello"
             assert hasattr(x, "check")
 
-``pytest`` discovers all tests following its :ref:`Conventions for Python test discovery <test discovery>`, so it finds both ``test_`` prefixed functions. There is no need to subclass anything, but make sure to prefix your class with ``Test`` otherwise the class will be skipped. We can simply run the module by passing its filename:
+``pytest`` 发现所有的测试都遵循其 :ref:`Python 测试发现的约定 <test discovery>`，因此它找到了两个以 ``test_`` 开头的函数。不需要继承任何东西，但一定要确保你的类名以 ``Test`` 开头，否则该类将被跳过。我们可以通过传递文件名来简单地运行模块：
 
 .. code-block:: pytest
 
@@ -150,23 +149,23 @@ Once you develop multiple tests, you may want to group them into a class. pytest
     FAILED test_class.py::TestClass::test_two - AssertionError: assert False
     1 failed, 1 passed in 0.12s
 
-The first test passed and the second failed. You can easily see the intermediate values in the assertion to help you understand the reason for the failure.
+第一个测试通过，第二个失败。你可以轻松查看断言中的中间值，以帮助你理解失败的原因。
 
-Grouping tests in classes can be beneficial for the following reasons:
+将测试组合在类中可以有以下优点：
 
- * Test organization
- * Sharing fixtures for tests only in that particular class
- * Applying marks at the class level and having them implicitly apply to all tests
+ * 测试组织
+ * 只在特定类中共享 fixtures
+ * 在类级别应用 marks，并将其隐式应用于所有测试
 
-Something to be aware of when grouping tests inside classes is that each test has a unique instance of the class.
-Having each test share the same class instance would be very detrimental to test isolation and would promote poor test practices.
-This is outlined below:
+当你将测试组合在类中时，需要注意的是，每个测试都有类的唯一实例。
+如果每个测试共享同一个类实例，那将对测试隔离非常不利，并且会提倡不良的测试实践。
+这在下面有详细说明：
 
 .. regendoc:wipe
 
 .. code-block:: python
 
-    # content of test_class_demo.py
+    # test_class_demo.py 文件内容
     class TestClassDemoInstance:
         value = 0
 
@@ -197,21 +196,21 @@ This is outlined below:
     FAILED test_class_demo.py::TestClassDemoInstance::test_two - assert 0 == 1
     1 failed, 1 passed in 0.12s
 
-Note that attributes added at class level are *class attributes*, so they will be shared between tests.
+注意，在类级别添加的属性是*类属性*，因此它们将在测试之间共享。
 
-Request a unique temporary directory for functional tests
+请求一个唯一的临时目录进行功能测试
 --------------------------------------------------------------
 
-``pytest`` provides :std:doc:`Builtin fixtures/function arguments <builtin>` to request arbitrary resources, like a unique temporary directory:
+``pytest`` 提供 :std:doc:`Builtin fixtures/function arguments <builtin>` 来请求任意资源，比如一个唯一的临时目录：
 
 .. code-block:: python
 
-    # content of test_tmp_path.py
+    # test_tmp_path.py 文件内容
     def test_needsfiles(tmp_path):
         print(tmp_path)
         assert 0
 
-List the name ``tmp_path`` in the test function signature and ``pytest`` will lookup and call a fixture factory to create the resource before performing the test function call. Before the test runs, ``pytest`` creates a unique-per-test-invocation temporary directory:
+在测试函数签名中列出名为 ``tmp_path`` 的名称，``pytest`` 将查找并调用一个 fixture 工厂在执行测试函数调用之前创建资源。在测试运行之前，``pytest`` 创建一个对每次测试调用都唯一的临时目录：
 
 .. code-block:: pytest
 
@@ -234,24 +233,24 @@ List the name ``tmp_path`` in the test function signature and ``pytest`` will lo
     FAILED test_tmp_path.py::test_needsfiles - assert 0
     1 failed in 0.12s
 
-More info on temporary directory handling is available at :ref:`Temporary directories and files <tmp_path handling>`.
+有关临时目录处理的更多信息，请查看 :ref:`临时目录和文件 <tmp_path handling>`。
 
-Find out what kind of builtin :ref:`pytest fixtures <fixtures>` exist with the command:
+查看哪些内置的 :ref:`pytest fixtures <fixtures>` 存在，可以使用命令：
 
 .. code-block:: bash
 
-    pytest --fixtures   # shows builtin and custom fixtures
+    pytest --fixtures   # 显示内置和自定义的 fixtures
 
-Note that this command omits fixtures with leading ``_`` unless the ``-v`` option is added.
+注意，这个命令会省略带有前导 ``_`` 的 fixtures，除非添加 ``-v`` 选项。
 
-Continue reading
+继续阅读
 -------------------------------------
 
-Check out additional pytest resources to help you customize tests for your unique workflow:
+查看额外的 pytest 资源以帮助你定制你的独特工作流：
 
-* ":ref:`usage`" for command line invocation examples
-* ":ref:`existingtestsuite`" for working with pre-existing tests
-* ":ref:`mark`" for information on the ``pytest.mark`` mechanism
-* ":ref:`fixtures`" for providing a functional baseline to your tests
-* ":ref:`plugins`" for managing and writing plugins
-* ":ref:`goodpractices`" for virtualenv and test layouts
+* ":ref:`usage`" 标注命令行调用示例
+* ":ref:`existingtestsuite`" 用于处理已存在的测试
+* ":ref:`mark`" 提供关于 ``pytest.mark`` 机制的信息
+* ":ref:`fixtures`" 为你的测试提供基础功能
+* ":ref:`plugins`" 用于管理和编写插件
+* ":ref:`goodpractices`" 虚拟环境和测试布局的好实践
